@@ -1,0 +1,20 @@
+[Unit]
+Description=CDS UI
+After=network.target cds-api.service
+
+[Service]
+Environment=BACKEND_HOST="http://localhost:8081"
+WorkingDirectory=/opt/cds/dist/
+ExecStart=/opt/cds/dist/caddy-linux-amd64
+KillMode=process
+Delegate=yes
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TasksMax=infinity
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=cds-ui
+
+[Install]
+WantedBy=default.target

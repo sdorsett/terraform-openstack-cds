@@ -1,0 +1,1475 @@
+
+#####################
+# API Configuration 
+#####################
+[api]
+
+  # if no model and no os/arch is specified in your job's requirements then spawn worker on this architecture (example: amd64, arm, 386)
+  defaultArch = "amd64"
+
+  # if no model and os/arch is specified in your job's requirements then spawn worker on this operating system (example: freebsd, linux, windows)
+  defaultOS = "linux"
+
+  # Either filesystem local storage or Openstack Swift Storage are supported
+  [api.artifact]
+
+    # swift or local
+    mode = "local"
+
+    [api.artifact.local]
+      baseDirectory = "/tmp/cds/artifacts"
+
+    [api.artifact.openstack]
+
+      # Use if your want to prefix containers for CDS Artifacts
+      containerPrefix = ""
+
+      # True if you want to disable Temporary URL in file upload
+      # disableTempURL = false
+
+      # Openstack Domain, generally value of $OS_DOMAIN_NAME, v3 auth only
+      domain = ""
+
+      # Openstack Password, generally value of $OS_PASSWORD
+      password = ""
+
+      # Region, generally value of $OS_REGION_NAME
+      region = ""
+
+      # Openstack Tenant, generally value of $OS_TENANT_NAME, v2 auth only
+      tenant = ""
+
+      # Authentication Endpoint, generally value of $OS_AUTH_URL
+      url = ""
+
+      # Openstack Username, generally value of $OS_USERNAME
+      username = ""
+
+  ##############################
+  # CDS Authentication Settings#
+  ##############################
+  [api.auth]
+
+    # The default group is the group in which every new user will be granted at signup
+    defaultGroup = ""
+
+    # Token for shared.infra group. This value will be used when shared.infra will be created
+    #at first CDS launch. This token can be used by CDS CLI, Hatchery, etc...
+    #This is mandatory.
+    sharedInfraToken = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+    [api.auth.ldap]
+      base = "dc=myorganization,dc=com"
+
+      # Define it if ldapsearch need to be authenticated
+      bindDN = ""
+
+      # Define it if ldapsearch need to be authenticated
+      bindPwd = ""
+      dn = "uid=%s,ou=people,dc=myorganization,dc=com"
+      enable = false
+      fullname = "{{.givenName}} {{.sn}}"
+      host = ""
+      port = 636
+      ssl = true
+
+    [api.auth.local]
+
+      # Allow signup from selected domains only - comma separated. Example: your-domain.com,another-domain.com
+      # signupAllowedDomains = ""
+
+  ######################
+  # CDS Cache Settings 
+  ######################
+  #
+  [api.cache]
+    ttl = 60
+
+    # Connect CDS to a redis cache If you more than one CDS instance and to avoid losing data at startup
+    [api.cache.redis]
+
+      # If your want to use a redis-sentinel based cluster, follow this syntax! <clustername>@sentinel1:26379,sentinel2:26379,sentinel3:26379
+      host = "localhost:6379"
+      password = ""
+
+  ################################
+  # Postgresql Database settings 
+  ################################
+  [api.database]
+
+    # Maximum wait for connection, in seconds
+    connectTimeout = 10
+    host = "10.240.0.90"
+
+    # DB Max connection
+    maxconn = 20
+    name = "cds"
+    password = "cds"
+    port = 5432
+
+    # Set a specific role to run SET ROLE for each connection
+    # role = ""
+
+    # DB SSL Mode: require (default), verify-full, or disable
+    sslmode = "disable"
+
+    # Statement timeout value in milliseconds
+    timeout = 3000
+    user = "cds"
+
+  [api.directories]
+    download = "/tmp/cds/download"
+    keys = "/tmp/cds/keys"
+
+  #######################
+  # CDS Events Settings 
+  #######################
+  [api.events]
+
+    [api.events.kafka]
+      broker = ""
+      enabled = false
+      maxmessagebytes = 10000000
+      password = ""
+      topic = ""
+      user = ""
+
+  ###########################
+  # CDS Features flipping Settings 
+  ###########################
+  [api.features]
+
+    # Feature flipping provider: https://maif.github.io/izanami
+    [api.features.izanami]
+      apiurl = ""
+      clientid = ""
+      clientsecret = ""
+
+      # Token shared between Izanami and CDS to be able to send webhooks from izanami
+      token = ""
+
+  ###########################
+  # Graylog Search. 
+  # When CDS API generates errors, you can fetch them with cdsctl. 
+  # Examples: 
+  # $ cdsctl admin errors get <error-id> 
+  # $ cdsctl admin errors get 55f6e977-d39b-11e8-8513-0242ac110007 
+  ###########################
+  [api.graylog]
+    accessToken = ""
+    stream = ""
+
+    # Example: http://localhost:9000
+    url = ""
+
+  [api.grpc]
+
+    # Listen GRPC address without port, example: 127.0.0.1
+    # addr = ""
+    port = 8082
+
+  [api.http]
+
+    # Listen HTTP address without port, example: 127.0.0.1
+    # addr = ""
+    port = 8081
+    sessionTTL = 60
+
+  ###########################
+  # Log settings.
+  ###########################
+  [api.log]
+
+    # Max service logs size in bytes (default: 15MB)
+    serviceMaxSize = 15728640
+
+    # Max step logs size in bytes (default: 15MB)
+    stepMaxSize = 15728640
+
+  [[api.providers]]
+    name = "sample-provider"
+    token = "60k8u7rwnuno12ex955530k8jv3nk8c2"
+
+  [api.secrets]
+    key = "j86u11cm6a66shi8qko96s03205ijtt1"
+
+  [[api.services]]
+    healthPath = "/cds"
+    healthPort = "443"
+    healthUrl = "https://ovh.github.io"
+    name = "sample-service"
+    path = "/cds"
+    port = "443"
+    type = "doc"
+    url = "https://ovh.github.io"
+
+  #####################
+  ## CDS SMTP Settings 
+  #####################
+  [api.smtp]
+    disable = true
+    from = "no-reply@cds.local"
+    host = ""
+    password = ""
+    port = ""
+    tls = false
+    user = ""
+
+  ###########################
+  # CDS Status Settings 
+  # Documentation: https://ovh.github.io/cds/hosting/monitoring/ 
+  ###########################
+  [api.status]
+
+    [api.status.api]
+
+      # if less than minInstance of API is running, an alert will on Global/API be created on /mon/status
+      minInstance = 1
+
+    [api.status.dbmigrate]
+
+      # if less than minInstance of dbmigrate service is running, an alert on Global/dbmigrate will be created on /mon/status
+      minInstance = 1
+
+    [api.status.elasticsearch]
+
+      # if less than minInstance of elasticsearch service is running, an alert on Global/elasticsearch will be created on /mon/status
+      minInstance = 1
+
+    [api.status.hatchery]
+
+      # if less than minInstance of hatchery service is running, an alert on Global/hatchery will be created on /mon/status
+      minInstance = 1
+
+    [api.status.hooks]
+
+      # if less than minInstance of hooks service is running, an alert on Global/hooks will be created on /mon/status
+      minInstance = 1
+
+    [api.status.repositories]
+
+      # if less than minInstance of repositories service is running, an alert on Global/hooks will be created on /mon/status
+      minInstance = 1
+
+    [api.status.vcs]
+
+      # if less than minInstance of vcs service is running, an alert will on Global/vcs be created on /mon/status
+      minInstance = 1
+
+  #####################
+  # CDS URLs Settings 
+  #####################
+  [api.url]
+    api = "http://localhost:8081"
+    ui = "http://localhost:2015"
+
+  [api.vault]
+    configurationKey = ""
+
+######################
+# CDS DB Migrate Service Settings 
+#######################
+[databaseMigrate]
+  URL = "http://localhost:8087"
+
+  # SQL Migration files directory
+  directory = "sql"
+
+  # Name of this CDS Database Migrate service
+  # Enter a name to enable this service
+  name = ""
+
+  ######################
+  # CDS API Settings 
+  #######################
+  [databaseMigrate.api]
+    maxHeartbeatFailures = 10
+    requestTimeout = 10
+    token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+    [databaseMigrate.api.grpc]
+      # insecure = false
+      url = "http://localhost:8082"
+
+    [databaseMigrate.api.http]
+      # insecure = false
+      url = "http://localhost:8081"
+
+  ################################
+  # Postgresql Database settings 
+  ################################
+  [databaseMigrate.db]
+
+    # Maximum wait for connection, in seconds
+    connectTimeout = 10
+    host = "10.240.0.90"
+
+    # DB Max connection
+    maxconn = 20
+    name = "cds"
+    password = "cds"
+    port = 5432
+
+    # Set a specific role to run SET ROLE for each connection
+    # role = ""
+
+    # DB SSL Mode: require (default), verify-full, or disable
+    sslmode = "disable"
+
+    # Statement timeout value in milliseconds
+    timeout = 3000
+    user = "cds"
+
+  ######################
+  # CDS DB Migrate HTTP Configuration 
+  #######################
+  [databaseMigrate.http]
+
+    # Listen address without port, example: 127.0.0.1
+    # addr = ""
+
+    # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+    # insecure = false
+    port = 8087
+
+#####################
+# Debug with gops 
+#####################
+[debug]
+
+  # allow debugging with gops
+  enable = false
+
+  # start a gops agent on specified URL. Ex: localhost:9999
+  remoteDebugURL = ""
+
+######################
+# CDS ElasticSearch Settings 
+# This is use for CDS timeline and is optional
+#######################
+[elasticsearch]
+  URL = "http://localhost:8088"
+
+  # Name of this CDS elasticsearch Service
+  # Enter a name to enable this service
+  name = ""
+
+  ######################
+  # CDS API Settings 
+  #######################
+  [elasticsearch.api]
+    maxHeartbeatFailures = 10
+    requestTimeout = 10
+    token = "************"
+
+    [elasticsearch.api.grpc]
+      # insecure = false
+      url = "http://localhost:8082"
+
+    [elasticsearch.api.http]
+      # insecure = false
+      url = "http://localhost:8081"
+
+  ######################
+  # CDS ElasticSearch Settings 
+  #######################
+  [elasticsearch.elasticsearch]
+
+    # index to store CDS events
+    # indexEvents = ""
+
+    # index to store CDS metrics
+    # indexMetrics = ""
+    password = ""
+    url = ""
+    username = ""
+
+  ######################
+  # CDS Elasticsearch HTTP Configuration 
+  #######################
+  [elasticsearch.http]
+
+    # Listen address without port, example: 127.0.0.1
+    # addr = ""
+    port = 8088
+
+[hatchery]
+
+  # Hatchery Kubernetes.
+  [hatchery.kubernetes]
+
+    # Certificate authority data (content, not path and not base64 encoded) for tls kubernetes (optional if no tls needed)
+    # certAuthorityData = ""
+
+    # Client certificate data (content, not path and not base64 encoded) for tls kubernetes (optional if no tls needed)
+    # clientCertData = ""
+
+    # Client certificate data (content, not path and not base64 encoded) for tls kubernetes (optional if no tls needed)
+    # clientKeyData = ""
+
+    # Worker default memory in Mo
+    defaultMemory = 1024
+
+    # Kubernetes config file in yaml
+    kubernetesConfigFile = "kubeconfig.yaml"
+
+    # Address of kubernetes master
+    kubernetesMasterURL = "https://1.1.1.1:8443"
+
+    # Kubernetes namespace in which workers are spawned
+    namespace = "cds"
+
+    # Nb Workers to provision
+    nbProvision = 1
+
+    # Password to connect to kubernetes cluster (optional if config file is set)
+    # password = ""
+
+    # Token to connect to kubernetes cluster (optional if config file is set)
+    # token = ""
+
+    # Username to connect to kubernetes cluster (optional if config file is set)
+    # username = ""
+
+    # Worker TTL (minutes)
+    workerTTL = 10
+
+    [hatchery.kubernetes.commonConfiguration]
+
+      # Name of Hatchery
+      name = ""
+
+      # URL of this Hatchery
+      url = "http://localhost:8086"
+
+      [hatchery.kubernetes.commonConfiguration.api]
+
+        # Maximum allowed consecutives failures on heatbeat routine
+        maxHeartbeatFailures = 10
+
+        # Request CDS API: timeout in seconds
+        requestTimeout = 10
+
+        # CDS Token to reach CDS API. See https://ovh.github.io/cds/advanced/advanced.worker.token/ 
+        token = ""
+
+        [hatchery.kubernetes.commonConfiguration.api.grpc]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+          # url = "http://localhost:8082"
+
+        [hatchery.kubernetes.commonConfiguration.api.http]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+
+          # CDS API URL
+          # url = "http://localhost:8081"
+
+      ######################
+      # CDS Hatchery HTTP Configuration 
+      #######################
+      [hatchery.kubernetes.commonConfiguration.http]
+
+        # Listen address without port, example: 127.0.0.1
+        # addr = ""
+        port = 8086
+
+      # Hatchery Log Configuration
+      [hatchery.kubernetes.commonConfiguration.logOptions]
+
+        [hatchery.kubernetes.commonConfiguration.logOptions.spawnOptions]
+
+          # log critical if spawn take more than this value (in seconds)
+          thresholdCritical = 480
+
+          # log warning if spawn take more than this value (in seconds)
+          thresholdWarning = 360
+
+      [hatchery.kubernetes.commonConfiguration.provision]
+
+        # Disabled provisioning. Format:true or false
+        disabled = false
+
+        # Check provisioning each n Seconds
+        frequency = 30
+
+        # if worker is queued less than this value (seconds), hatchery does not take care of it
+        graceTimeQueued = 4
+
+        # Maximum allowed simultaneous workers provisioning
+        maxConcurrentProvisioning = 10
+
+        # Maximum allowed simultaneous workers
+        maxWorker = 10
+
+        # Check if some worker model have to be registered each n Seconds
+        registerFrequency = 60
+
+        # Worker Log Configuration
+        [hatchery.kubernetes.commonConfiguration.provision.workerLogsOptions]
+
+          [hatchery.kubernetes.commonConfiguration.provision.workerLogsOptions.graylog]
+
+            # Example: X-OVH-TOKEN. You can use many keys: aaa,bbb
+            extraKey = ""
+
+            # value for extraKey field. For many keys: valueaaa,valuebbb
+            extraValue = ""
+
+            # Example: thot.ovh.com
+            host = ""
+
+            # Example: 12202
+            port = 0
+
+            # tcp or udp
+            protocol = "tcp"
+
+  # Hatchery Local.
+  [hatchery.local]
+
+    # BaseDir for worker workspace
+    basedir = "/tmp"
+
+    # Nb Workers to provision
+    nbProvision = 1
+
+    [hatchery.local.commonConfiguration]
+
+      # Name of Hatchery
+      name = "my-local-hatchery"
+
+      # URL of this Hatchery
+      url = "http://localhost:8086"
+
+      [hatchery.local.commonConfiguration.api]
+
+        # Maximum allowed consecutives failures on heatbeat routine
+        maxHeartbeatFailures = 10
+
+        # Request CDS API: timeout in seconds
+        requestTimeout = 10
+
+        # CDS Token to reach CDS API. See https://ovh.github.io/cds/advanced/advanced.worker.token/ 
+        token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+        [hatchery.local.commonConfiguration.api.grpc]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+          # url = "http://localhost:8082"
+
+        [hatchery.local.commonConfiguration.api.http]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+
+          # CDS API URL
+          # url = "http://localhost:8081"
+
+      ######################
+      # CDS Hatchery HTTP Configuration 
+      #######################
+      [hatchery.local.commonConfiguration.http]
+
+        # Listen address without port, example: 127.0.0.1
+        # addr = ""
+        port = 8086
+
+      # Hatchery Log Configuration
+      [hatchery.local.commonConfiguration.logOptions]
+
+        [hatchery.local.commonConfiguration.logOptions.spawnOptions]
+
+          # log critical if spawn take more than this value (in seconds)
+          thresholdCritical = 480
+
+          # log warning if spawn take more than this value (in seconds)
+          thresholdWarning = 360
+
+      [hatchery.local.commonConfiguration.provision]
+
+        # Disabled provisioning. Format:true or false
+        disabled = false
+
+        # Check provisioning each n Seconds
+        frequency = 30
+
+        # if worker is queued less than this value (seconds), hatchery does not take care of it
+        graceTimeQueued = 4
+
+        # Maximum allowed simultaneous workers provisioning
+        maxConcurrentProvisioning = 10
+
+        # Maximum allowed simultaneous workers
+        maxWorker = 10
+
+        # Check if some worker model have to be registered each n Seconds
+        registerFrequency = 60
+
+        # Worker Log Configuration
+        [hatchery.local.commonConfiguration.provision.workerLogsOptions]
+
+          [hatchery.local.commonConfiguration.provision.workerLogsOptions.graylog]
+
+            # Example: X-OVH-TOKEN. You can use many keys: aaa,bbb
+            extraKey = ""
+
+            # value for extraKey field. For many keys: valueaaa,valuebbb
+            extraValue = ""
+
+            # Example: thot.ovh.com
+            host = ""
+
+            # Example: 12202
+            port = 0
+
+            # tcp or udp
+            protocol = "tcp"
+
+  # Hatchery Marathon.
+  [hatchery.marathon]
+
+    # Worker default memory in Mo
+    defaultMemory = 1024
+
+    # Prefix of id for workers spawn on marathon. Enter 'workers' to have id as: '/workers/a-worker'
+    idPrefix = "/cds/workers"
+
+    # Use this option if you want to add labels on workers spawned by this hatchery.
+    # Format: MarathonLabels = "A_LABEL=value-of-label,B_LABEL=value-of-label-b"
+    labels = ""
+
+    # Marathon Password, you need a marathon User to use it
+    password = ""
+
+    # URL of your marathon
+    url = "http://1.1.1.1:8080,1.1.1.2:8080,1.1.1.3:8080"
+
+    # Marathon Username, used to call Marathon URL
+    user = ""
+
+    # Worker Timeout Spawning (seconds)
+    workerSpawnTimeout = 120
+
+    # Worker TTL (minutes)
+    workerTTL = 10
+
+    [hatchery.marathon.commonConfiguration]
+
+      # Name of Hatchery
+      name = ""
+
+      # URL of this Hatchery
+      url = "http://localhost:8086"
+
+      [hatchery.marathon.commonConfiguration.api]
+
+        # Maximum allowed consecutives failures on heatbeat routine
+        maxHeartbeatFailures = 10
+
+        # Request CDS API: timeout in seconds
+        requestTimeout = 10
+
+        # CDS Token to reach CDS API. See https://ovh.github.io/cds/advanced/advanced.worker.token/ 
+        token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+        [hatchery.marathon.commonConfiguration.api.grpc]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+          # url = "http://localhost:8082"
+
+        [hatchery.marathon.commonConfiguration.api.http]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+
+          # CDS API URL
+          # url = "http://localhost:8081"
+
+      ######################
+      # CDS Hatchery HTTP Configuration 
+      #######################
+      [hatchery.marathon.commonConfiguration.http]
+
+        # Listen address without port, example: 127.0.0.1
+        # addr = ""
+        port = 8086
+
+      # Hatchery Log Configuration
+      [hatchery.marathon.commonConfiguration.logOptions]
+
+        [hatchery.marathon.commonConfiguration.logOptions.spawnOptions]
+
+          # log critical if spawn take more than this value (in seconds)
+          thresholdCritical = 480
+
+          # log warning if spawn take more than this value (in seconds)
+          thresholdWarning = 360
+
+      [hatchery.marathon.commonConfiguration.provision]
+
+        # Disabled provisioning. Format:true or false
+        disabled = false
+
+        # Check provisioning each n Seconds
+        frequency = 30
+
+        # if worker is queued less than this value (seconds), hatchery does not take care of it
+        graceTimeQueued = 4
+
+        # Maximum allowed simultaneous workers provisioning
+        maxConcurrentProvisioning = 10
+
+        # Maximum allowed simultaneous workers
+        maxWorker = 10
+
+        # Check if some worker model have to be registered each n Seconds
+        registerFrequency = 60
+
+        # Worker Log Configuration
+        [hatchery.marathon.commonConfiguration.provision.workerLogsOptions]
+
+          [hatchery.marathon.commonConfiguration.provision.workerLogsOptions.graylog]
+
+            # Example: X-OVH-TOKEN. You can use many keys: aaa,bbb
+            extraKey = ""
+
+            # value for extraKey field. For many keys: valueaaa,valuebbb
+            extraValue = ""
+
+            # Example: thot.ovh.com
+            host = ""
+
+            # Example: 12202
+            port = 0
+
+            # tcp or udp
+            protocol = "tcp"
+
+  # Hatchery OpenStack. Doc: https://ovh.github.io/cds/advanced/advanced.hatcheries.openstack/
+  [hatchery.openstack]
+
+    # Opentack Auth Endpoint
+    address = "https://auth.cloud.ovh.net/v2.0"
+
+    # max wait for create an openstack image (in seconds)
+    createImageTimeout = 180
+
+    # if true: hatchery does not create openstack image when a worker model is updated
+    disableCreateImage = false
+
+    # Openstack Domain, generally value of $OS_DOMAIN_NAME, v3 auth only
+    # domain = ""
+
+    # Facultative. IP Range for spawned workers. 
+    # Format: a.a.a.a/b,c.c.c.c/e 
+    # Hatchery will use an IP from this range to create Virtual Machine (Fixed IP Attribute).
+    #If not set, it will get an address from the neutron service
+    iprange = ""
+
+    # Hatchery will use this Network to spawn CDS Worker (Virtual Machine).
+    networkString = "Ext-Net"
+
+    # Openstack Password
+    password = ""
+
+    # Openstack Region
+    region = ""
+
+    # Openstack Tenant, generally value of $OS_TENANT_NAME, v2 auth only
+    tenant = ""
+
+    # Openstack User
+    user = ""
+
+    # Worker TTL (minutes)
+    workerTTL = 30
+
+    [hatchery.openstack.commonConfiguration]
+
+      # Name of Hatchery
+      name = ""
+
+      # URL of this Hatchery
+      url = "http://localhost:8086"
+
+      [hatchery.openstack.commonConfiguration.api]
+
+        # Maximum allowed consecutives failures on heatbeat routine
+        maxHeartbeatFailures = 10
+
+        # Request CDS API: timeout in seconds
+        requestTimeout = 10
+
+        # CDS Token to reach CDS API. See https://ovh.github.io/cds/advanced/advanced.worker.token/ 
+        token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+        [hatchery.openstack.commonConfiguration.api.grpc]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+          # url = "http://localhost:8082"
+
+        [hatchery.openstack.commonConfiguration.api.http]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+
+          # CDS API URL
+          # url = "http://localhost:8081"
+
+      ######################
+      # CDS Hatchery HTTP Configuration 
+      #######################
+      [hatchery.openstack.commonConfiguration.http]
+
+        # Listen address without port, example: 127.0.0.1
+        # addr = ""
+        port = 8086
+
+      # Hatchery Log Configuration
+      [hatchery.openstack.commonConfiguration.logOptions]
+
+        [hatchery.openstack.commonConfiguration.logOptions.spawnOptions]
+
+          # log critical if spawn take more than this value (in seconds)
+          thresholdCritical = 480
+
+          # log warning if spawn take more than this value (in seconds)
+          thresholdWarning = 360
+
+      [hatchery.openstack.commonConfiguration.provision]
+
+        # Disabled provisioning. Format:true or false
+        disabled = false
+
+        # Check provisioning each n Seconds
+        frequency = 30
+
+        # if worker is queued less than this value (seconds), hatchery does not take care of it
+        graceTimeQueued = 4
+
+        # Maximum allowed simultaneous workers provisioning
+        maxConcurrentProvisioning = 10
+
+        # Maximum allowed simultaneous workers
+        maxWorker = 10
+
+        # Check if some worker model have to be registered each n Seconds
+        registerFrequency = 60
+
+        # Worker Log Configuration
+        [hatchery.openstack.commonConfiguration.provision.workerLogsOptions]
+
+          [hatchery.openstack.commonConfiguration.provision.workerLogsOptions.graylog]
+
+            # Example: X-OVH-TOKEN. You can use many keys: aaa,bbb
+            extraKey = ""
+
+            # value for extraKey field. For many keys: valueaaa,valuebbb
+            extraValue = ""
+
+            # Example: thot.ovh.com
+            host = ""
+
+            # Example: 12202
+            port = 0
+
+            # tcp or udp
+            protocol = "tcp"
+
+  # Hatchery Swarm. Doc: https://ovh.github.io/cds/advanced/advanced.hatcheries.swarm/
+  [hatchery.swarm]
+
+    # Worker default memory in Mo
+    defaultMemory = 1024
+
+    # Docker Options. --add-host and --privileged supported. Example: dockerOpts="--add-host=myhost:x.x.x.x,myhost2:y.y.y.y --privileged"
+    # dockerOpts = ""
+
+    # Max Containers on Host managed by this Hatchery
+    maxContainers = 10
+
+    # if true: hatchery creates private network between services with ipv6 enabled
+    networkEnableIPv6 = false
+
+    # Percent reserved for spawning worker with service requirement
+    ratioService = 75
+
+    # Worker TTL (minutes)
+    workerTTL = 10
+
+    [hatchery.swarm.commonConfiguration]
+
+      # Name of Hatchery
+      name = ""
+
+      # URL of this Hatchery
+      url = "http://localhost:8086"
+
+      [hatchery.swarm.commonConfiguration.api]
+
+        # Maximum allowed consecutives failures on heatbeat routine
+        maxHeartbeatFailures = 10
+
+        # Request CDS API: timeout in seconds
+        requestTimeout = 10
+
+        # CDS Token to reach CDS API. See https://ovh.github.io/cds/advanced/advanced.worker.token/ 
+        token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+        [hatchery.swarm.commonConfiguration.api.grpc]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+          # url = "http://localhost:8082"
+
+        [hatchery.swarm.commonConfiguration.api.http]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+
+          # CDS API URL
+          # url = "http://localhost:8081"
+
+      ######################
+      # CDS Hatchery HTTP Configuration 
+      #######################
+      [hatchery.swarm.commonConfiguration.http]
+
+        # Listen address without port, example: 127.0.0.1
+        # addr = ""
+        port = 8086
+
+      # Hatchery Log Configuration
+      [hatchery.swarm.commonConfiguration.logOptions]
+
+        [hatchery.swarm.commonConfiguration.logOptions.spawnOptions]
+
+          # log critical if spawn take more than this value (in seconds)
+          thresholdCritical = 480
+
+          # log warning if spawn take more than this value (in seconds)
+          thresholdWarning = 360
+
+      [hatchery.swarm.commonConfiguration.provision]
+
+        # Disabled provisioning. Format:true or false
+        disabled = false
+
+        # Check provisioning each n Seconds
+        frequency = 30
+
+        # if worker is queued less than this value (seconds), hatchery does not take care of it
+        graceTimeQueued = 4
+
+        # Maximum allowed simultaneous workers provisioning
+        maxConcurrentProvisioning = 10
+
+        # Maximum allowed simultaneous workers
+        maxWorker = 10
+
+        # Check if some worker model have to be registered each n Seconds
+        registerFrequency = 60
+
+        # Worker Log Configuration
+        [hatchery.swarm.commonConfiguration.provision.workerLogsOptions]
+
+          [hatchery.swarm.commonConfiguration.provision.workerLogsOptions.graylog]
+
+            # Example: X-OVH-TOKEN. You can use many keys: aaa,bbb
+            extraKey = ""
+
+            # value for extraKey field. For many keys: valueaaa,valuebbb
+            extraValue = ""
+
+            # Example: thot.ovh.com
+            host = ""
+
+            # Example: 12202
+            port = 0
+
+            # tcp or udp
+            protocol = "tcp"
+
+    # List of Docker Engines
+    [hatchery.swarm.dockerEngines]
+
+      [hatchery.swarm.dockerEngines.sample-docker-engine]
+
+        # DOCKER_API_VERSION
+        APIVersion = ""
+
+        # content of your ca.pem
+        TLSCAPEM = ""
+
+        # content of your cert.pem
+        TLSCERTPEM = ""
+
+        # content of your key.pem
+        TLSKEYPEM = ""
+
+        # DOCKER_CERT_PATH
+        certPath = ""
+
+        # DOCKER_HOST
+        host = "///var/run/docker.sock"
+
+        # DOCKER_INSECURE_SKIP_TLS_VERIFY
+        insecureSkipTLSVerify = false
+
+        # Max Containers on Host managed by this Hatchery
+        maxContainers = 0
+
+  # Hatchery VShpere. Doc: https://ovh.github.io/cds/advanced/advanced.hatcheries.vsphere/
+  [hatchery.vsphere]
+
+    # Name of the virtual ethernet card
+    cardName = "e1000"
+
+    # max wait for create a vsphere image (in seconds)
+    createImageTimeout = 180
+
+    # VSphere Datacenter
+    datacenterString = ""
+
+    # VSphere Datastore
+    datastoreString = ""
+
+    # if true: hatchery does not create vsphere image when a worker model is updated
+    disableCreateImage = false
+
+    # VShpere Endpoint, example:pcc-11-222-333-444.ovh.com
+    endpoint = ""
+
+    # VShpere Network
+    networkString = ""
+
+    # VShpere Password
+    password = ""
+
+    # VSphere User
+    user = ""
+
+    # Worker TTL (minutes)
+    workerTTL = 30
+
+    [hatchery.vsphere.commonConfiguration]
+
+      # Name of Hatchery
+      name = ""
+
+      # URL of this Hatchery
+      url = "http://localhost:8086"
+
+      [hatchery.vsphere.commonConfiguration.api]
+
+        # Maximum allowed consecutives failures on heatbeat routine
+        maxHeartbeatFailures = 10
+
+        # Request CDS API: timeout in seconds
+        requestTimeout = 10
+
+        # CDS Token to reach CDS API. See https://ovh.github.io/cds/advanced/advanced.worker.token/ 
+        token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+        [hatchery.vsphere.commonConfiguration.api.grpc]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+          # url = "http://localhost:8082"
+
+        [hatchery.vsphere.commonConfiguration.api.http]
+
+          # sslInsecureSkipVerify, set to true if you use a self-signed SSL on CDS API
+          # insecure = false
+
+          # CDS API URL
+          # url = "http://localhost:8081"
+
+      ######################
+      # CDS Hatchery HTTP Configuration 
+      #######################
+      [hatchery.vsphere.commonConfiguration.http]
+
+        # Listen address without port, example: 127.0.0.1
+        # addr = ""
+        port = 8086
+
+      # Hatchery Log Configuration
+      [hatchery.vsphere.commonConfiguration.logOptions]
+
+        [hatchery.vsphere.commonConfiguration.logOptions.spawnOptions]
+
+          # log critical if spawn take more than this value (in seconds)
+          thresholdCritical = 480
+
+          # log warning if spawn take more than this value (in seconds)
+          thresholdWarning = 360
+
+      [hatchery.vsphere.commonConfiguration.provision]
+
+        # Disabled provisioning. Format:true or false
+        disabled = false
+
+        # Check provisioning each n Seconds
+        frequency = 30
+
+        # if worker is queued less than this value (seconds), hatchery does not take care of it
+        graceTimeQueued = 4
+
+        # Maximum allowed simultaneous workers provisioning
+        maxConcurrentProvisioning = 10
+
+        # Maximum allowed simultaneous workers
+        maxWorker = 10
+
+        # Check if some worker model have to be registered each n Seconds
+        registerFrequency = 60
+
+        # Worker Log Configuration
+        [hatchery.vsphere.commonConfiguration.provision.workerLogsOptions]
+
+          [hatchery.vsphere.commonConfiguration.provision.workerLogsOptions.graylog]
+
+            # Example: X-OVH-TOKEN. You can use many keys: aaa,bbb
+            extraKey = ""
+
+            # value for extraKey field. For many keys: valueaaa,valuebbb
+            extraValue = ""
+
+            # Example: thot.ovh.com
+            host = ""
+
+            # Example: 12202
+            port = 0
+
+            # tcp or udp
+            protocol = "tcp"
+
+######################
+# CDS Hooks Settings 
+#######################
+[hooks]
+  URL = "http://localhost:8083"
+
+  # Disable all hooks executions
+  disable = false
+
+  # Number of execution to keep
+  executionHistory = 10
+
+  # Name of this CDS Hooks Service
+  # Enter a name to enable this service
+  name = ""
+
+  # Execution retry delay in seconds
+  retryDelay = 120
+
+  # Retry execution while this number of error is not reached
+  retryError = 3
+
+  # Public url for external call (webhook)
+  urlPublic = ""
+
+  ######################
+  # CDS API Settings 
+  #######################
+  [hooks.api]
+    maxHeartbeatFailures = 10
+    requestTimeout = 10
+    token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+    [hooks.api.grpc]
+      # insecure = false
+      url = "http://localhost:8082"
+
+    [hooks.api.http]
+      # insecure = false
+      url = "http://localhost:8081"
+
+  ######################
+  # CDS Hooks Cache Settings 
+  #######################
+  [hooks.cache]
+    ttl = 60
+
+    # Connect CDS to a redis cache If you more than one CDS instance and to avoid losing data at startup
+    [hooks.cache.redis]
+
+      # If your want to use a redis-sentinel based cluster, follow this syntax! <clustername>@sentinel1:26379,sentinel2:26379,sentinel3:26379
+      host = "localhost:6379"
+      password = ""
+
+  ######################
+  # CDS Hooks HTTP Configuration 
+  #######################
+  [hooks.http]
+
+    # Listen address without port, example: 127.0.0.1
+    # addr = ""
+    port = 8083
+
+#####################
+# CDS Logs Settings 
+#####################
+[log]
+
+  # Log Level: debug, info, warning, notice, critical
+  level = ""
+
+  [log.graylog]
+
+    # Example: X-OVH-TOKEN. You can use many keys: aaa,bbb
+    extraKey = ""
+
+    # value for extraKey field. For many keys: valueaaa,valuebbb
+    extraValue = ""
+
+    # Example: thot.ovh.com
+    host = ""
+
+    # Example: 12202
+    port = 0
+
+    # tcp or udp
+    protocol = ""
+
+######################
+# CDS Repositories Settings 
+#######################
+[repositories]
+  URL = "http://localhost:8085"
+
+  # Root directory where the service will store all checked-out repositories
+  basedir = ""
+
+  # Name of this CDS Repositories Service
+  # Enter a name to enable this service
+  name = ""
+
+  # Operation retention in redis store (in days)
+  operation_retention = 5
+
+  # Re retention on the filesystem (in days)
+  repositories_retention = 10
+
+  ######################
+  # CDS API Settings 
+  #######################
+  [repositories.api]
+    maxHeartbeatFailures = 10
+    requestTimeout = 10
+    token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+    [repositories.api.grpc]
+      # insecure = false
+      url = "http://localhost:8082"
+
+    [repositories.api.http]
+      # insecure = false
+      url = "http://localhost:8081"
+
+  ######################
+  # CDS Repositories Cache Settings 
+  #######################
+  [repositories.cache]
+    ttl = 60
+
+    [repositories.cache.redis]
+
+      # If your want to use a redis-sentinel based cluster, follow this syntax! <clustername>@sentinel1:26379,sentinel2:26379,sentinel3:26379
+      host = "localhost:6379"
+      password = ""
+
+  ######################
+  # CDS Repositories HTTP Configuration 
+  #######################
+  [repositories.http]
+
+    # Listen address without port, example: 127.0.0.1
+    # addr = ""
+    port = 8085
+
+###########################
+# CDS Tracing Settings 
+###########################
+[tracing]
+  Enable = false
+  SamplingProbability = 0.0
+
+  # Name of this CDS Instance. This value is added to /mon/metrics as label named 'cds' on each series
+  name = "cdsinstance"
+
+  [tracing.Exporter]
+
+    [tracing.Exporter.Jaeger]
+      HTTPCollectorEndpoint = "http://localhost:14268"
+
+    [tracing.Exporter.Prometheus]
+      ReporteringPeriod = 10
+
+######################
+# CDS VCS Settings 
+#######################
+[vcs]
+  URL = "http://localhost:8084"
+
+  # Name of this CDS VCS Service
+  # Enter a name to enable this service
+  name = ""
+
+  [vcs.UI]
+
+    [vcs.UI.http]
+      url = "http://localhost:2015"
+
+  ######################
+  # CDS API Settings 
+  #######################
+  [vcs.api]
+    maxHeartbeatFailures = 10
+    requestTimeout = 10
+    token = "psvupv3nh2ltoyk9yrv1a76cxqj6auo67p34fr5ocjxg8fj1rz5lm420snr2u5k9qfy9bjnp9j1xp81ik8r4yho9c49063kggtc76tujpubxult621j2iv3vgl0o65xv"
+
+    [vcs.api.grpc]
+      # insecure = false
+      url = "http://localhost:8082"
+
+    [vcs.api.http]
+      # insecure = false
+      url = "http://localhost:8081"
+
+  ######################
+  # CDS VCS Cache Settings 
+  #######################
+  [vcs.cache]
+    ttl = 60
+
+    [vcs.cache.redis]
+
+      # If your want to use a redis-sentinel based cluster, follow this syntax ! <clustername>@sentinel1:26379,sentinel2:26379sentinel3:26379
+      host = "localhost:6379"
+      password = ""
+
+  ######################
+  # CDS VCS HTTP Configuration 
+  #######################
+  [vcs.http]
+
+    # Listen address without port, example: 127.0.0.1
+    # addr = ""
+    port = 8084
+
+  ######################
+  # CDS VCS Server Settings 
+  #######################
+  [vcs.servers]
+
+    [vcs.servers.Bitbucket]
+
+      # URL of this VCS Server
+      url = "https://mybitbucket.com"
+
+      [vcs.servers.Bitbucket.bitbucket]
+
+        #######
+        # CDS <-> Bitbucket. Documentation on https://ovh.github.io/cds/hosting/repositories-manager/bitbucket/ 
+        ########
+        # You can change the consumeKey if you want
+        consumerKey = "xxx"
+
+        # Does polling is supported by VCS Server
+        disablePolling = false
+
+        # Does webhooks are supported by VCS Server
+        disableWebHooks = false
+        privateKey = "xxx"
+
+        # If you want to have a reverse proxy url for your repository webhook, for example if you put https://myproxy.com it will generate a webhook URL like this https://myproxy.com/UUID_OF_YOUR_WEBHOOK
+        # proxyWebhook = ""
+
+        # optional, Bitbucket Token associated to username, used to add comment on Pull Request
+        token = ""
+
+        # optional. Bitbucket username, used to add comment on Pull Request on failed build.
+        username = ""
+
+        [vcs.servers.Bitbucket.bitbucket.Status]
+
+          # Set to true if you don't want CDS to push statuses on the VCS server
+          # disable = false
+
+    [vcs.servers.Github]
+
+      # URL of this VCS Server
+      url = "https://github.com"
+
+      [vcs.servers.Github.github]
+
+        #######
+        # CDS <-> Github. Documentation on https://ovh.github.io/cds/hosting/repositories-manager/github/ 
+        ########
+        # Github OAuth Application Client ID
+        clientId = "xxxx"
+
+        # Github OAuth Application Client Secret
+        clientSecret = "xxxx"
+
+        # Does polling is supported by VCS Server
+        disablePolling = false
+
+        # Does webhooks are supported by VCS Server
+        disableWebHooks = false
+
+        # If you want to have a reverse proxy url for your repository webhook, for example if you put https://myproxy.com it will generate a webhook URL like this https://myproxy.com/UUID_OF_YOUR_WEBHOOK
+        # proxyWebhook = ""
+
+        # optional, Github Token associated to username, used to add comment on Pull Request
+        token = ""
+
+        # optional. Github username, used to add comment on Pull Request on failed build.
+        username = ""
+
+        [vcs.servers.Github.github.Status]
+
+          # Set to true if you don't want CDS to push statuses on the VCS server
+          # disable = false
+
+          # Set to true if you don't want CDS to push CDS URL in statuses on the VCS server
+          # showDetail = false
+
+    [vcs.servers.Gitlab]
+
+      # URL of this VCS Server
+      url = "https://gitlab.com"
+
+      [vcs.servers.Gitlab.gitlab]
+
+        #######
+        # CDS <-> Gitlab. Documentation on https://ovh.github.io/cds/hosting/repositories-manager/gitlab/ 
+        ########
+        appId = "xxxx"
+
+        # Does polling is supported by VCS Server
+        disablePolling = false
+
+        # Does webhooks are supported by VCS Server
+        disableWebHooks = false
+
+        # If you want to have a reverse proxy url for your repository webhook, for example if you put https://myproxy.com it will generate a webhook URL like this https://myproxy.com/UUID_OF_YOUR_WEBHOOK
+        # proxyWebhook = ""
+        secret = "xxxx"
+
+        [vcs.servers.Gitlab.gitlab.Status]
+
+          # Set to true if you don't want CDS to push statuses on the VCS server
+          # disable = false
+
+          # Set to true if you don't want CDS to push CDS URL in statuses on the VCS server
+          # showDetail = false
+
