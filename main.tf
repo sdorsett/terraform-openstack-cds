@@ -48,13 +48,6 @@ resource "openstack_compute_secgroup_v2" "terraform-cds-allow-external" {
   }
 
   rule {
-    from_port   = 6443
-    to_port     = 6443
-    ip_protocol = "tcp"
-    cidr        = "0.0.0.0/0"
-  }
-
-  rule {
     from_port   = -1
     to_port     = -1
     ip_protocol = "icmp"
@@ -148,12 +141,6 @@ resource "openstack_compute_instance_v2" "cds-postgresql" {
       "sudo netplan apply",
       "sudo mv /tmp/authorized_keys /root/.ssh/authorized_keys",
       "sudo chmod 600 /root/.ssh/authorized_keys",
-#      "echo -e 'n\np\n1\n\n\nt\n83\np\nw\n' | sudo fdisk /dev/sdb",
-#      "sudo mkfs -t ext4 /dev/sdb1",
-#      "sudo mkdir /var/lib/postgresql/",
-#      "echo '/dev/sdb1    /var/lib/postgresql/   ext4    defaults     0        2' | sudo tee --append /etc/fstab",
-#      "sudo mount -a",
-#      "sudo apt-get install postgresql -y"
     ]
     connection {
       type        = "ssh"
