@@ -1,4 +1,10 @@
-provider "openstack" {}
+provider "openstack" {
+#  user_name is unset so it defaults to OS_USERNAME environment variable
+#  tenant_name is unset so it defaults to OS_TENANT_NAME or OS_PROJECT_NAME environment variable
+#  password is unset so it defaults to OS_PASSWORD environment variable
+#  auth_url is unset so it defaults to OS_AUTH_URL environment variable
+#  region is unset so it defaults to OS_REGION_NAME environment variable
+}
 
 variable "private_key" {
   default = "/root/.ssh/id_rsa-terraform_cds"
@@ -22,18 +28,6 @@ resource "openstack_compute_keypair_v2" "terraform-cds-keypair" {
   name       = "terraform-cds-keypair"
   public_key = "${file(var.public_key)}"
   depends_on = ["null_resource.generate-sshkey"]
-}
-
-resource "openstack_networking_network_v2" "internal" {
-  name           = "internal"
-  admin_state_up = "true"
-}
-
-resource "openstack_networking_subnet_v2" "internal" {
-  name       = "internal"
-  network_id = "${openstack_networking_network_v2.internal.id}"
-  cidr       = "10.240.0.0/24"
-  ip_version = 4
 }
 
 resource "openstack_compute_secgroup_v2" "terraform-cds-allow-external" {
@@ -75,10 +69,16 @@ resource "openstack_compute_secgroup_v2" "terraform-cds-allow-external" {
     cidr        = "0.0.0.0/0"
   }
 
+  rule {
+    from_port   = 8084
+    to_port     = 8084
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
+
 }
 
 resource "openstack_blockstorage_volume_v2" "cds-postgresql-data" {
-  region      = "US-EAST-VA-1"
   name        = "cds-postgresql-data"
   description = "data volume for cds postgresql"
   size        = 100
@@ -93,6 +93,15 @@ data "openstack_compute_flavor_v2" "s1-2" {
   name = "s1-4"
 }
 
+data "openstack_networking_network_v2" "infra-internal" {
+  name           = "infra-internal"
+}
+
+data "openstack_networking_subnet_v2" "infra-internal-subnet" {
+  name       = "infra-internal-subnet"
+  ip_version = 4
+}
+
 resource "openstack_compute_instance_v2" "cds-postgresql" {
   name            = "cds-postgresql"
   image_id        = "${data.openstack_images_image_v2.ubuntu_18_04.id}"
@@ -105,7 +114,7 @@ resource "openstack_compute_instance_v2" "cds-postgresql" {
   }
 
   network {
-    name = "${openstack_networking_network_v2.internal.name}"
+    name = "${data.openstack_networking_network_v2.infra-internal.name}"
     fixed_ip_v4 = "10.240.0.90"
   }
 
@@ -168,7 +177,7 @@ resource "openstack_compute_instance_v2" "cds-engine" {
   }
 
   network {
-    name = "${openstack_networking_network_v2.internal.name}"
+    name = "${data.openstack_networking_network_v2.infra-internal.name}"
     fixed_ip_v4 = "10.240.0.91"
   }
 
@@ -281,7 +290,9 @@ resource "null_resource" "install_cds_and_redis" {
       "sudo chmod 755 /tmp/cds-*.service",
       "sudo chown root:root /tmp/cds-*.service",
       "sudo mv /tmp/cds-*.service /etc/systemd/system/",
-      "sudo mv /tmp/conf.toml /opt/cds/conf.toml",
+      "sudo mv /tmp/*.toml /opt/cds/",
+      "sudo mv /tmp/cds.kube.conf /opt/cds/",
+      "sudo sed -i 's/XXX_CDS_PUBLIC_IP_ADDRESS_XXX/${openstack_compute_instance_v2.cds-engine.access_ip_v4}/g' /opt/cds/*.toml",
       "for service in $(ls /etc/systemd/system/cds-*.service |xargs -n 1 basename); do echo $service; sudo systemctl enable $service; sudo systemctl start $service; done",
     ]
     connection {
