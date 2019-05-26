@@ -3,7 +3,7 @@ Description=CDS API
 After=network.target
 
 [Service]
-ExecStart=/opt/cds/cds-engine-linux-amd64 start api --config /opt/cds/conf.toml
+ExecStart=/opt/cds/cds-engine-linux-amd64 start api --config /opt/cds/api-config.toml
 KillMode=process
 Delegate=yes
 LimitNOFILE=infinity
