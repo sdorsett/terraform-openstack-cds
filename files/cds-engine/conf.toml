@@ -118,7 +118,7 @@
     user = "cds"
 
   [api.directories]
-    download = "/tmp/cds/download"
+    download = "/opt/cds/download"
     keys = "/tmp/cds/keys"
 
   #######################
@@ -260,8 +260,8 @@
   # CDS URLs Settings 
   #####################
   [api.url]
-    api = "http://localhost:8081"
-    ui = "http://localhost:2015"
+    api = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:8081"
+    ui = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:2015"
 
   [api.vault]
     configurationKey = ""
@@ -411,10 +411,10 @@
     defaultMemory = 1024
 
     # Kubernetes config file in yaml
-    kubernetesConfigFile = "kubeconfig.yaml"
+    kubernetesConfigFile = "/opt/cds/cds.kube.conf"
 
     # Address of kubernetes master
-    kubernetesMasterURL = "https://1.1.1.1:8443"
+    kubernetesMasterURL = "https://10.240.0.9:6443"
 
     # Kubernetes namespace in which workers are spawned
     namespace = "cds"
@@ -437,7 +437,7 @@
     [hatchery.kubernetes.commonConfiguration]
 
       # Name of Hatchery
-      name = ""
+      name = "cds"
 
       # URL of this Hatchery
       url = "http://localhost:8086"
@@ -451,7 +451,7 @@
         requestTimeout = 10
 
         # CDS Token to reach CDS API. See https://ovh.github.io/cds/advanced/advanced.worker.token/ 
-        token = ""
+        token = "KUBERNETES_TOKEN"
 
         [hatchery.kubernetes.commonConfiguration.api.grpc]
 
@@ -465,7 +465,7 @@
           # insecure = false
 
           # CDS API URL
-          # url = "http://localhost:8081"
+          url = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:8081"
 
       ######################
       # CDS Hatchery HTTP Configuration 
@@ -1190,7 +1190,7 @@
 
     [hooks.api.http]
       # insecure = false
-      url = "http://localhost:8081"
+      url = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:8081"
 
   ######################
   # CDS Hooks Cache Settings 
@@ -1272,7 +1272,7 @@
 
     [repositories.api.http]
       # insecure = false
-      url = "http://localhost:8081"
+      url = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:8081"
 
   ######################
   # CDS Repositories Cache Settings 
@@ -1326,7 +1326,7 @@
   [vcs.UI]
 
     [vcs.UI.http]
-      url = "http://localhost:2015"
+      url = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:2015"
 
   ######################
   # CDS API Settings 
@@ -1342,7 +1342,7 @@
 
     [vcs.api.http]
       # insecure = false
-      url = "http://localhost:8081"
+      url = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:8081"
 
   ######################
   # CDS VCS Cache Settings 
