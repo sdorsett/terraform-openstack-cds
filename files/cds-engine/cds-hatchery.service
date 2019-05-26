@@ -3,7 +3,7 @@ Description=CDS Hatchery
 After=network.target cds-api.service
 
 [Service]
-ExecStart=/opt/cds/cds-engine-linux-amd64 start hatchery:local --config /opt/cds/conf.toml
+ExecStart=/opt/cds/cds-engine-linux-amd64 start hatchery:kubernetes --config /opt/cds/conf.toml
 KillMode=process
 Delegate=yes
 LimitNOFILE=infinity
