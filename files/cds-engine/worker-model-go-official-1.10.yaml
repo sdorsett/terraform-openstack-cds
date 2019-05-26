@@ -1,0 +1,16 @@
+name: go-official-1.10
+group: shared.infra
+image: golang:1.10
+description: ""
+type: docker
+envs:
+  CDS_GRAYLOG_EXTRA_KEY: '{{.GraylogExtraKey}}'
+  CDS_GRAYLOG_EXTRA_VALUE: '{{.GraylogExtraValue}}'
+  CDS_GRAYLOG_HOST: '{{.GraylogHost}}'
+  CDS_GRAYLOG_PORT: '{{.GraylogPort}}'
+  CDS_SINGLE_USE: "1"
+  CDS_TTL: '{{.TTL}}'
+shell: sh -c
+cmd: curl {{.API}}/download/worker/linux/$(uname -m) -o worker --retry 10 --retry-max-time
+  120 && chmod +x worker && exec ./worker
+
