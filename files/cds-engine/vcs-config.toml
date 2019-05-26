@@ -1,0 +1,186 @@
+
+#####################
+# CDS Logs Settings 
+#####################
+[log]
+
+  # Log Level: debug, info, warning, notice, critical
+  level = ""
+
+  [log.graylog]
+
+    # Example: X-OVH-TOKEN. You can use many keys: aaa,bbb
+    extraKey = ""
+
+    # value for extraKey field. For many keys: valueaaa,valuebbb
+    extraValue = ""
+
+    # Example: thot.ovh.com
+    host = ""
+
+    # Example: 12202
+    port = 0
+
+    # tcp or udp
+    protocol = ""
+
+######################
+# CDS VCS Settings 
+#######################
+[vcs]
+  URL = "http://localhost:8084"
+
+  # Name of this CDS VCS Service
+  # Enter a name to enable this service
+  name = "cds-vcs"
+
+  [vcs.UI]
+
+    [vcs.UI.http]
+      url = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:2015"
+
+  ######################
+  # CDS API Settings 
+  #######################
+  [vcs.api]
+    maxHeartbeatFailures = 10
+    requestTimeout = 10
+    token = "XXX_GITHUB_SHARED_INFRA_TOKEN_XXX"
+
+    [vcs.api.grpc]
+      # insecure = false
+      # url = "http://localhost:8082"
+
+    [vcs.api.http]
+      # insecure = false
+      url = "http://XXX_CDS_PUBLIC_IP_ADDRESS_XXX:8081"
+
+  ######################
+  # CDS VCS Cache Settings 
+  #######################
+  [vcs.cache]
+    ttl = 60
+
+    [vcs.cache.redis]
+
+      # If your want to use a redis-sentinel based cluster, follow this syntax ! <clustername>@sentinel1:26379,sentinel2:26379sentinel3:26379
+      host = "localhost:6379"
+      password = ""
+
+  ######################
+  # CDS VCS HTTP Configuration 
+  #######################
+  [vcs.http]
+
+    # Listen address without port, example: 127.0.0.1
+    # addr = ""
+    port = 8084
+
+  ######################
+  # CDS VCS Server Settings 
+  #######################
+  [vcs.servers]
+
+    [vcs.servers.Bitbucket]
+
+      # URL of this VCS Server
+      url = "https://mybitbucket.com"
+
+      [vcs.servers.Bitbucket.bitbucket]
+
+        #######
+        # CDS <-> Bitbucket. Documentation on https://ovh.github.io/cds/hosting/repositories-manager/bitbucket/ 
+        ########
+        # You can change the consumeKey if you want
+        consumerKey = "xxx"
+
+        # Does polling is supported by VCS Server
+        disablePolling = false
+
+        # Does webhooks are supported by VCS Server
+        disableWebHooks = false
+        privateKey = "xxx"
+
+        # If you want to have a reverse proxy url for your repository webhook, for example if you put https://myproxy.com it will generate a webhook URL like this https://myproxy.com/UUID_OF_YOUR_WEBHOOK
+        # proxyWebhook = ""
+
+        # optional, Bitbucket Token associated to username, used to add comment on Pull Request
+        token = ""
+
+        # optional. Bitbucket username, used to add comment on Pull Request on failed build.
+        username = ""
+
+        [vcs.servers.Bitbucket.bitbucket.Status]
+
+          # Set to true if you don't want CDS to push statuses on the VCS server
+          # disable = false
+
+    [vcs.servers.Github]
+
+      # URL of this VCS Server
+      url = "https://github.com"
+
+      [vcs.servers.Github.github]
+
+        #######
+        # CDS <-> Github. Documentation on https://ovh.github.io/cds/hosting/repositories-manager/github/ 
+        ########
+        # Github OAuth Application Client ID
+        clientId = "XXX_GITHUB_CLIENT_ID_XXX"
+
+        # Github OAuth Application Client Secret
+        clientSecret = token = "XXX_GITHUB_CLIENT_SECRET_XXX"
+
+        # Does polling is supported by VCS Server
+        disablePolling = false
+
+        # Does webhooks are supported by VCS Server
+        disableWebHooks = false
+
+        # If you want to have a reverse proxy url for your repository webhook, for example if you put https://myproxy.com it will generate a webhook URL like this https://myproxy.com/UUID_OF_YOUR_WEBHOOK
+        # proxyWebhook = ""
+
+        # optional, Github Token associated to username, used to add comment on Pull Request
+        token = ""
+
+        # optional. Github username, used to add comment on Pull Request on failed build.
+        username = ""
+
+        [vcs.servers.Github.github.Status]
+
+          # Set to true if you don't want CDS to push statuses on the VCS server
+          # disable = false
+
+          # Set to true if you don't want CDS to push CDS URL in statuses on the VCS server
+          # showDetail = false
+
+    [vcs.servers.Gitlab]
+
+      # URL of this VCS Server
+      url = "https://gitlab.com"
+
+      [vcs.servers.Gitlab.gitlab]
+
+        #######
+        # CDS <-> Gitlab. Documentation on https://ovh.github.io/cds/hosting/repositories-manager/gitlab/ 
+        ########
+        appId = "xxxx"
+
+        # Does polling is supported by VCS Server
+        disablePolling = false
+
+        # Does webhooks are supported by VCS Server
+        disableWebHooks = false
+
+        # If you want to have a reverse proxy url for your repository webhook, for example if you put https://myproxy.com it will generate a webhook URL like this https://myproxy.com/UUID_OF_YOUR_WEBHOOK
+        # proxyWebhook = ""
+        secret = "xxxx"
+
+        [vcs.servers.Gitlab.gitlab.Status]
+
+          # Set to true if you don't want CDS to push statuses on the VCS server
+          # disable = false
+
+          # Set to true if you don't want CDS to push CDS URL in statuses on the VCS server
+          # showDetail = false
+
