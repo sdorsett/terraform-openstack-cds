@@ -1,0 +1,15 @@
+[Unit]
+Description=CDS API
+After=network.target
+
+[Service]
+ExecStart=/opt/cds/cds-engine-linux-amd64 start hooks --config /opt/cds/hooks-config.toml
+KillMode=process
+Delegate=yes
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TasksMax=infinity
+
+[Install]
+WantedBy=default.target
