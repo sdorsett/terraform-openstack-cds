@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "<<< downloading cds binaries >>>"
-mkdir /opt/cds
+mkdir -p /opt/cds/download
 cd /opt/cds
 LAST_RELEASE=$(curl -s https://api.github.com/repos/ovh/cds/releases | grep tag_name | head -n 1 | cut -d '"' -f 4)
 OS=linux # could be linux, darwin, windows
@@ -13,6 +13,8 @@ wget https://github.com/ovh/cds/releases/download/$LAST_RELEASE/cdsctl-$OS-$ARCH
 wget https://github.com/ovh/cds/releases/download/$LAST_RELEASE/ui.tar.gz
 wget https://github.com/ovh/cds/releases/download/$LAST_RELEASE/sql.tar.gz
 chmod +x *-$OS-$ARCH
+
+mv cds-worker-$OS-$ARCH download/
 
 echo "<<< updating cds sql schema >>>"
 tar -zxf sql.tar.gz
