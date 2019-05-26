@@ -30,7 +30,7 @@
   [hooks.api]
     maxHeartbeatFailures = 10
     requestTimeout = 10
-    token = "GITHUB_TOKEN"
+    token = "GITHUB_SHARD_INFRA_TOKEN"
 
     [hooks.api.grpc]
       # insecure = false
