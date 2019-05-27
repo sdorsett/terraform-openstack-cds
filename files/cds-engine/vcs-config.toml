@@ -129,7 +129,7 @@
         clientId = "XXX_GITHUB_CLIENT_ID_XXX"
 
         # Github OAuth Application Client Secret
-        clientSecret = token = "XXX_GITHUB_CLIENT_SECRET_XXX"
+        clientSecret = "XXX_GITHUB_CLIENT_SECRET_XXX"
 
         # Does polling is supported by VCS Server
         disablePolling = false
